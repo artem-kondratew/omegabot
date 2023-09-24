@@ -7,8 +7,8 @@
 
 
 #include "header.h"
-#include "Exception.h"
-#include "str.h"
+#include "Exception.hpp"
+#include "str.hpp"
 
 
 class List;

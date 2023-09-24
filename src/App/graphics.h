@@ -7,8 +7,8 @@
 
 
 #include "header.h"
-#include "Connect.h"
-#include "History.h"
+#include "Connect.hpp"
+#include "History.hpp"
 
 
 #define KEY_RETURN     10

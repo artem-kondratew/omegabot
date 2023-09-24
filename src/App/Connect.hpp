@@ -8,10 +8,10 @@
 
 #include "header.h"
 #include "../Arduino/Config.h"
-#include "Exception.h"
+#include "Exception.hpp"
 #include "Gservo.h"
-#include "str.h"
-#include "Vision.h"
+#include "str.hpp"
+#include "Vision.hpp"
 
 
 inline std::mutex connect_mutex;
