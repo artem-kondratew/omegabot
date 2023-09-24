@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<omegabot xmlns:xacro="http://www.ros.org/wiki/xacro" name="omegabot">
+
+<xacro:include filename="inertial_macros.xacro"/>
+
+
+<!-- COLORS -->
+
+
+<material name="white">
+    <color rgba="1 1 1 0.8"/>
+</material>
+
+<material name="black">
+    <color rgba="0 0 0 1"/>
+</material>
+
+
+<!-- LINKS -->
+
+<link name="base_link"></link>
+
+<link name="chassis">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <box size="0.6 0.2 0.1"/>
+        </geometry>
+        <material name="white"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <box size="0.6 0.2 0.1"/>
+        </geometry>
+    </collision>
+    <xacro:inertial_box mass="0.5" x ="0.6" y="0.2" z="0.1">
+    	<origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:inertial_box>
+</link>
+
+<link name="left_forward_wheel">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.1" length="0.04"/>
+        </geometry>
+        <material name="black"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.1" length="0.04"/>
+        </geometry>
+    </collision>
+    <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.1">
+    	<origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:inertial_cylinder>
+</link>
+
+<link name="left_backward_wheel">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.1" length="0.04"/>
+        </geometry>
+        <material name="black"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.1" length="0.04"/>
+        </geometry>
+    </collision>
+    <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.1">
+    	<origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:inertial_cylinder>
+</link>
+
+<link name="right_forward_wheel">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.1" length="0.04"/>
+        </geometry>
+        <material name="black"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.1" length="0.04"/>
+        </geometry>
+    </collision>
+    <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.1">
+    	<origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:inertial_cylinder>
+</link>
+
+<link name="right_backward_wheel">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.1" length="0.04"/>
+        </geometry>
+        <material name="black"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.1" length="0.04"/>
+        </geometry>
+    </collision>
+    <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.1">
+    	<origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:inertial_cylinder>
+</link>
+
+
+<!-- JOINTS -->
+
+
+<joint name="chassis_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="chassis"/>
+    <origin xyz="0 0 0.1"/>
+</joint>
+
+<joint name="left_forward_wheel_joint" type="continuous">
+    <parent link="chassis"/>
+    <child link="left_forward_wheel"/>
+    <origin xyz="0.2 0.12 0" rpy="-${pi/2} 0 0"/>
+    <axis xyz="0 0 1"/>
+</joint>
+
+<joint name="left_backward_wheel_joint" type="continuous">
+    <parent link="chassis"/>
+    <child link="left_backward_wheel"/>
+    <origin xyz="-0.2 0.12 0" rpy="-${pi/2} 0 0"/>
+    <axis xyz="0 0 1"/>
+</joint>
+
+<joint name="right_forward_wheel_joint" type="continuous">
+    <parent link="chassis"/>
+    <child link="right_forward_wheel"/>
+    <origin xyz="0.2 -0.12 0" rpy="${pi/2} 0 0"/>
+    <axis xyz="0 0 1"/>
+</joint>
+
+<joint name="right_backward_wheel_joint" type="continuous">
+    <parent link="chassis"/>
+    <child link="right_backward_wheel"/>
+    <origin xyz="-0.2 -0.12 0" rpy="${pi/2} 0 0"/>
+    <axis xyz="0 0 1"/>
+</joint>
+
+</omegabot>
