@@ -4,8 +4,6 @@
 
 
 #include "Bot.h"
-#include "Camera.h"
-#include "Claw.h"
 #include "Config.h"
 
 
@@ -68,7 +66,7 @@ void Connection::setMsgValues() {
     message[MESSAGE_START_BYTE1_CELL] = START_BYTE;
     message[MESSAGE_START_BYTE2_CELL] = START_BYTE;
     
-    message[MESSAGE_ANSWER_CELL] = 1;
+    message[MESSAGE_ANSWER_CELL] = 0;
 
     message[MESSAGE_CHECKSUM_CELL] = calcMessageCheckSum();
 }
@@ -92,8 +90,8 @@ void Connection::receiveCommand() {
                 command[cell] = Serial.read();
             }
             if (!calcCommandCheckSum()) {
-                sendMessage();
                 findCommand();
+                sendMessage();
             }
         }
     }
@@ -104,6 +102,7 @@ void Connection::findCommand() {
     uint16_t value = command[COMMAND_VALUE1_CELL] * 100 + command[COMMAND_VALUE2_CELL];
     uint8_t task = command[COMMAND_TASK_CELL];
     if (task == MOVE_FORWARD_TASK) {
+        message[MESSAGE_ANSWER_CELL] = 1;
         return Bot::moveForward(value);
     }
     if (task == MOVE_BACKWARD_TASK) {
@@ -114,36 +113,13 @@ void Connection::findCommand() {
     }
     if (task == TURN_RIGHT_TASK) {
         return Bot::turnRight();
+        message[MESSAGE_ANSWER_CELL] = 2;
     }
     if (task == TURN_LEFT_TASK) {
         return Bot::turnLeft();
     }
-    if (task == PITCH_CAMERA_TASK) {
-        return Camera::pitch(value);
-    }
-    if (task == YAW_CAMERA_TASK) {
-        return Camera::yaw(value);
-    }
-    if (task == CLAW_PUSH_TASK) {
-        return Claw::push(value);
-    }
-    if (task == CLAW_POP_TASK) {
-        return Claw::pop();
-    }
-    if (task == CLAW_ROTATE_TASK) {
-        return Claw::rotateClaw(value);
-    }
-    if (task == CLAW_DROP_TASK) {
-        return Claw::drop();
-    }
-    if (task == CLAW_RISE_TASK) {
-        return Claw::rise();
-    }
     if (task == BEEP_TASK) {
         return Bot::beep(true);
-    }
-    if (task == SHAKE_TASK) {
-        return Claw::shake();
     }
     if (task == BLINK_TASK) {
         return Bot::blink(true);

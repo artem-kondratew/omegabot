@@ -6,8 +6,6 @@
 #define OMEGABOT_HEADER_H
 
 
-//#include <opencv2/opencv.hpp>
-
 #include <chrono>
 #include <csignal>
 #include <cstdint>

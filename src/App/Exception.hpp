@@ -1,5 +1,5 @@
 //
-// Created by user on 3/23/23.
+// Created by artem-kondratew on 3/23/23.
 //
 
 #ifndef OMEGABOT_EXCEPTION_H

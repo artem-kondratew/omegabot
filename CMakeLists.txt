@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(omegabot)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -11,18 +11,23 @@ set(CMAKE_CXX_FLAGS "-pthread")
 
 find_package(ament_cmake REQUIRED)
 find_package(Curses REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
 
 include_directories(${CURSES_INCLUDE_DIR})
 
-add_executable(arduino_controller src/App/main.cpp src/Arduino/Config.h src/App/graphics.h src/App/Connect.h
-               src/App/Connect.cpp src/App/str.h src/App/str.cpp src/App/Gservo.h src/App/Gservo.cpp src/App/History.h
-               src/App/List.h src/App/Exception.h src/App/Vision.h src/App/Vision.cpp src/App/header.h)
+add_executable(arduino_controller src/App/main.cpp src/Arduino/Config.h src/App/graphics.h src/App/Connect.hpp
+               src/App/Connect.cpp src/App/Exception.hpp src/App/header.h)
 
 target_link_libraries(arduino_controller ${CURSES_LIBRARIES})
 
-# find_package(OpenCV REQUIRED)
-# include_directories(${OpenCV_INCLUDE_DIRS})
-# target_link_libraries(Hackaton ${OpenCV_LIBS})
+#add_executable(arduino_controller src/App/arduino_controller.cpp src/App/arduino_controller.hpp)
+#ament_target_dependencies(arduino_controller rclcpp std_msgs)
+
+add_executable(keyboard_controller src/App/keyboard_controller.cpp src/App/keyboard_controller.hpp src/Arduino/Config.h)
+ament_target_dependencies(keyboard_controller rclcpp std_msgs)
+
+target_link_libraries(keyboard_controller ${CURSES_LIBRARIES})
 
 install(DIRECTORY
   config description launch worlds
@@ -31,6 +36,7 @@ install(DIRECTORY
 
 install(TARGETS
   arduino_controller
+  keyboard_controller
   DESTINATION lib/${PROJECT_NAME}
 )
 

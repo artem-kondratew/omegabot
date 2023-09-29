@@ -1,7 +1,5 @@
 
 #include "Bot.h"
-#include "Camera.h"
-#include "Claw.h"
 #include "Connection.h"
 #include "Config.h"
 
@@ -17,8 +15,6 @@ void setup() {
     Serial.setTimeout(0);
 
     Bot::init();
-    Camera::init();
-    Claw::init();
 
     beep_timer = millis();
     blink_timer = millis();
@@ -27,6 +23,7 @@ void setup() {
 
 void loop() {
     Connection::receiveCommand();
+   
     if (millis() - beep_timer > BLINK_TIMER) {
         Bot::beep();
         beep_timer = millis();

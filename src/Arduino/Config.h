@@ -17,8 +17,8 @@
 #define FORWARD                  1
 #define BACKWARD                 0
 
-#define DEFAULT_SPEED          120
-#define ROTATE_SPEED           120
+#define DEFAULT_SPEED          255
+#define ROTATE_SPEED           255
 
 #define TIMER                  100
 #define BLINK_TIMER            200
@@ -44,30 +44,14 @@
 #define STOP_TASK                2
 #define TURN_RIGHT_TASK          3
 #define TURN_LEFT_TASK           4
-#define PITCH_CAMERA_TASK        5
-#define YAW_CAMERA_TASK          6
-#define CLAW_PUSH_TASK           7
-#define CLAW_POP_TASK            8
-#define CLAW_ROTATE_TASK         9
-#define CLAW_DROP_TASK          10
-#define CLAW_RISE_TASK          11
-#define BEEP_TASK               12
-#define SHAKE_TASK              13
-#define BLINK_TASK              14
-#define SET_SPEED_TASK          15
+#define BEEP_TASK                5
+#define BLINK_TASK               6
+#define SET_SPEED_TASK           7
 
 #define PING_DXL_ID              0
 #define PING_TASK        STOP_TASK
 #define PING_VALUE1              0
 #define PING_VALUE2              0
-
-#define CLAW_MIN_ANGLE          35
-#define CLAW_MAX_ANGLE         150
-#define ROTATE_MIN_ANGLE         5
-#define ROTATE_MAX_ANGLE       100
-
-#define ROTATE_DEFAULT_ANGLE   100
-#define CLAW_DEFAULT_ANGLE       0
 
 
 #endif

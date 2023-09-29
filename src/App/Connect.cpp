@@ -1,5 +1,5 @@
 //
-// Created by user on 05.03.23.
+// Created by artem-kondratew on 05.03.23.
 //
 
 #include "Connect.hpp"
@@ -75,8 +75,6 @@ bool Connect::setConnection() {
         }
     }
     std::cout << "connected" << std::endl;
-    initImportantCommandMap();
-    initCommandMap();
     sleep(1);
     return true;
 }
@@ -154,23 +152,6 @@ void Connect::encodeCommand(uint64_t cmd) {
 }
 
 
-Gservo* Connect::findGservo(uint8_t id) {
-    if (id == 1) {
-        return &gservo1;
-    }
-    if (id == 2) {
-        return &gservo2;
-    }
-    if (id == 3) {
-        return &gservo3;
-    }
-    if (id == 4) {
-        return &gservo4;
-    }
-    return nullptr;
-}
-
-
 bool Connect::receiveMessage() {
     if (!openArduino()) {
         return false;
@@ -183,26 +164,11 @@ bool Connect::receiveMessage() {
         if (!calcMessageCheckSum(buf)) {
             std::memcpy(message, buf, sizeof(uint8_t) * MESSAGE_SIZE);
             //Connect::decodeMessage();
-            memset(buf,0,MESSAGE_SIZE);
+            memset(buf, 0, MESSAGE_SIZE);
             return true;
         }
     }
     return false;
-}
-
-
-uint64_t Connect::checkNumberCommand(std::string s) {
-    uint8_t numbers[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    uint64_t flag = 0;
-    for (uint64_t i = 0; i < key_cmd.size(); i++) {
-        for (uint8_t number: numbers) {
-            if (s[i] == number) {
-                flag++;
-                break;
-            }
-        }
-    }
-    return flag;
 }
 
 
@@ -241,35 +207,6 @@ void Connect::turnLeft() {
 }
 
 
-void Connect::push() {
-    connect_mutex.lock();
-    resetCommand();
-    setTask(CLAW_PUSH_TASK);
-    setValue(0);
-}
-
-
-void Connect::pop() {
-    connect_mutex.lock();
-    resetCommand();
-    setTask(CLAW_POP_TASK);
-}
-
-
-void Connect::rise() {
-    connect_mutex.lock();
-    resetCommand();
-    setTask(CLAW_RISE_TASK);
-}
-
-
-void Connect::drop() {
-    connect_mutex.lock();
-    resetCommand();
-    setTask(CLAW_DROP_TASK);
-}
-
-
 void Connect::beep() {
     connect_mutex.lock();
     resetCommand();
@@ -277,61 +214,8 @@ void Connect::beep() {
 }
 
 
-void Connect::rotate(uint8_t angle) {
-    connect_mutex.lock();
-    resetCommand();
-    setTask(CLAW_ROTATE_TASK);
-    setValue(angle);
-}
-
-
-void Connect::shake() {
-    connect_mutex.lock();
-    resetCommand();
-    setTask(SHAKE_TASK);
-}
-
-
 void Connect::blink() {
     connect_mutex.lock();
     resetCommand();
     setTask(BLINK_TASK);
-}
-
-
-void Connect::decodeKeyInput() {
-
-    if (checkNumberCommand(key_cmd.get_str()) == key_cmd.size()) {
-        Connect::encodeCommand(stoi(key_cmd.get_str()));
-        return;
-    }
-
-    if (imp_command_map.count(key_cmd.get_str())) {
-        return imp_command_map[key_cmd.get_str()]();
-    }
-    // if (Vision::is_processing()) {
-    //     return;
-    // }
-
-    if (command_map.count(key_cmd.get_str())) {
-        return command_map[key_cmd.get_str()]();
-    }
-}
-
-
-void Connect::initImportantCommandMap() {
-    //imp_command_map["start vision"] = Vision::start_processing;
-    //imp_command_map["stop vision"] = Vision::stop_processing;
-    imp_command_map["beep"] = Connect::beep;
-    imp_command_map["blink"] = Connect::blink;
-}
-
-
-void Connect::initCommandMap() {
-    command_map["stop"] = stop;
-    command_map["push"] = push;
-    command_map["pop"] = pop;
-    command_map["rise"] = rise;
-    command_map["drop"] = drop;
-    command_map["shake"] = shake;
 }

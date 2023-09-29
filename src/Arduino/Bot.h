@@ -30,7 +30,7 @@ public:
 
 
 void Bot::init() {
-    speed = DEFAULT_SPEED;
+    speed = 255;//DEFAULT_SPEED;
     pinMode(M1_DIR, OUTPUT);
     pinMode(M1_PWM, OUTPUT);
     pinMode(M2_DIR, OUTPUT);
@@ -48,6 +48,7 @@ void Bot::moveForward(uint8_t speed) {
     analogWrite(M1_PWM, speed);
     digitalWrite(M2_DIR, FORWARD);
     analogWrite(M2_PWM, speed);
+    digitalWrite(LED_BUILTIN, HIGH);
 }
 
 
@@ -56,6 +57,7 @@ void Bot::moveBackward(uint8_t speed) {
     analogWrite(M1_PWM, speed);
     digitalWrite(M2_DIR, BACKWARD);
     analogWrite(M2_PWM, speed);
+    digitalWrite(LED_BUILTIN, LOW);
 }
 
 
@@ -86,16 +88,16 @@ void Bot::beep(bool start=false) {
         if (start) {
             beep_count = 5;
             beep_flag = !beep_flag;
-            tone(A1, 3000);
+            tone(BEEP_PIN, 3000);
         }
         return;
     }
     beep_flag = !beep_flag;
     if (beep_flag) {
-        tone(A1, 3000);
+        tone(BEEP_PIN, 3000);
     }
     else {
-        noTone(A1);
+        noTone(BEEP_PIN);
     }
     beep_count--;
 }
