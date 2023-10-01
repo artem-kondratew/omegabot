@@ -3,6 +3,9 @@
 #define Config_h
 
 
+#include <stdint.h>
+
+
 #define SERIAL_BAUDRATE       9600
 
 #define M1_DIR                   4
@@ -10,19 +13,15 @@
 #define M2_DIR                   7
 #define M2_PWM                   6
 
-#define BEEP_PIN                A1
-
 #define LEFT                     0
 #define RIGHT                    1
 #define FORWARD                  1
 #define BACKWARD                 0
 
 #define DEFAULT_SPEED          255
-#define ROTATE_SPEED           255
+#define DEFAULT_ROTATE_SPEED   180
 
 #define TIMER                  100
-#define BLINK_TIMER            200
-#define BEEP_TIMER             500
 #define START_BYTE              64
 
 #define COMMAND_START_BYTE1_CELL 0
@@ -39,19 +38,17 @@
 #define MESSAGE_CHECKSUM_CELL    3
 #define MESSAGE_SIZE             4
 
-#define MOVE_BACKWARD_TASK       0
-#define MOVE_FORWARD_TASK        1
-#define STOP_TASK                2
-#define TURN_RIGHT_TASK          3
-#define TURN_LEFT_TASK           4
-#define BEEP_TASK                5
-#define BLINK_TASK               6
-#define SET_SPEED_TASK           7
-
-#define PING_DXL_ID              0
-#define PING_TASK        STOP_TASK
+#define PING_TASK                0
 #define PING_VALUE1              0
 #define PING_VALUE2              0
+
+#define MOVE_BACKWARD_TASK       1
+#define MOVE_FORWARD_TASK        2
+#define STOP_TASK                3
+#define TURN_RIGHT_TASK          4
+#define TURN_LEFT_TASK           5
+#define LED_ON_TASK              6
+#define LED_OFF_TASK             7
 
 
 #endif

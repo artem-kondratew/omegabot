@@ -3,8 +3,8 @@
 #define Connection_h
 
 
-#include "Bot.h"
-#include "Config.h"
+#include "bot.h"
+#include "config.h"
 
 
 uint8_t command[COMMAND_SIZE];
@@ -62,12 +62,9 @@ uint16_t Connection::calcMessageCheckSum() {
 
 
 void Connection::setMsgValues() {
-    
     message[MESSAGE_START_BYTE1_CELL] = START_BYTE;
     message[MESSAGE_START_BYTE2_CELL] = START_BYTE;
-    
-    message[MESSAGE_ANSWER_CELL] = 0;
-
+    message[MESSAGE_ANSWER_CELL] = command[COMMAND_TASK_CELL];
     message[MESSAGE_CHECKSUM_CELL] = calcMessageCheckSum();
 }
 
@@ -82,7 +79,7 @@ void Connection::sendMessage() {
 
 
 void Connection::receiveCommand() {
-    if (Serial.available() >= 6) {
+    if (Serial.available() >= COMMAND_SIZE) {
         command[COMMAND_START_BYTE1_CELL] = Serial.read();
         command[COMMAND_START_BYTE2_CELL] = Serial.read();
         if (command[COMMAND_START_BYTE1_CELL] == START_BYTE && command[COMMAND_START_BYTE2_CELL] == START_BYTE) {
@@ -102,7 +99,6 @@ void Connection::findCommand() {
     uint16_t value = command[COMMAND_VALUE1_CELL] * 100 + command[COMMAND_VALUE2_CELL];
     uint8_t task = command[COMMAND_TASK_CELL];
     if (task == MOVE_FORWARD_TASK) {
-        message[MESSAGE_ANSWER_CELL] = 1;
         return Bot::moveForward(value);
     }
     if (task == MOVE_BACKWARD_TASK) {
@@ -112,20 +108,16 @@ void Connection::findCommand() {
         return Bot::stop();
     }
     if (task == TURN_RIGHT_TASK) {
-        return Bot::turnRight();
-        message[MESSAGE_ANSWER_CELL] = 2;
+        return Bot::turnRight(value);
     }
     if (task == TURN_LEFT_TASK) {
-        return Bot::turnLeft();
+        return Bot::turnLeft(value);
     }
-    if (task == BEEP_TASK) {
-        return Bot::beep(true);
+    if (task == LED_ON_TASK) {
+        return Bot::ledOn();
     }
-    if (task == BLINK_TASK) {
-        return Bot::blink(true);
-    }
-    if (task == SET_SPEED_TASK) {
-        return Bot::set_speed(value);
+    if (task == LED_OFF_TASK) {
+        return Bot::ledOff();
     }
 }
 
