@@ -22,7 +22,7 @@ add_executable(
 ament_target_dependencies(arduino_controller rclcpp geometry_msgs)
 
 install(DIRECTORY
-  config description launch worlds
+  description launch
   DESTINATION share/${PROJECT_NAME}
 )
 
