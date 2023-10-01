@@ -13,7 +13,6 @@
 #include <string>
 #include <termios.h>
 #include <unistd.h>
-#include <ncurses.h>
 
 #include "../arduino/config.h"
 
