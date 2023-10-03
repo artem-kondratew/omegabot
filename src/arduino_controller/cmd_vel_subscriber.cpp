@@ -7,6 +7,11 @@
 #include "connect.hpp"
 
 
+namespace {
+    int last_command = -1;
+}
+
+
 class MinimalSubscriber : public rclcpp::Node {
 public:
     MinimalSubscriber()
@@ -18,20 +23,38 @@ public:
 
 private:
     void topic_callback(const geometry_msgs::msg::Twist & msg) const {
-        RCLCPP_INFO(this->get_logger(), "I heard: '%f %f'", msg.linear.x, msg.angular.z);
 
         Connect::resetCommand();
 
-        if (msg.linear.x > 0) {
-            Connect::moveForward();
-            Connect::ledOn();
-            RCLCPP_INFO(this->get_logger(), "I heard: move %d", Connect::getMessageAnswer());
-        }
-
         if (msg.linear.x == 0 && msg.angular.z == 0) {
             Connect::stop();
-            Connect::ledOff();
-            RCLCPP_INFO(this->get_logger(), "I heard: stop %d", Connect::getMessageAnswer());
+            last_command = STOP_TASK;
+        }
+
+        if (msg.linear.x > 0) {
+            if (last_command == MOVE_BACKWARD_TASK) {
+                return;
+            }
+            Connect::moveForward();
+            last_command = MOVE_FORWARD_TASK;
+        }
+
+        if (msg.linear.x < 0) {
+            if (last_command == MOVE_FORWARD_TASK) {
+                return;
+            }
+            Connect::moveBackward();
+            last_command = MOVE_BACKWARD_TASK;
+        }
+
+        if (msg.linear.x == 0 && msg.angular.z < 0) {
+            Connect::turnRight();
+            last_command = TURN_RIGHT_TASK;
+        }
+
+        if (msg.linear.x == 0 && msg.angular.z > 0) {
+            Connect::turnLeft();
+            last_command = TURN_LEFT_TASK;
         }
     }
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr subscription_;
