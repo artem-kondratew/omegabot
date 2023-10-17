@@ -19,7 +19,7 @@
 #define BACKWARD                 0
 
 #define DEFAULT_SPEED          255
-#define DEFAULT_ROTATE_SPEED   180
+#define DEFAULT_ROTATE_SPEED   255
 
 #define TIMER                  100
 #define START_BYTE              64
