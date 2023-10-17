@@ -52,10 +52,10 @@ public:
 
 public:
     static void stop();
-    static void moveForward();
-    static void moveBackward();
-    static void turnRight();
-    static void turnLeft();
+    static void moveForward(int velocity);
+    static void moveBackward(int velocity);
+    static void turnRight(int rotate_velocity);
+    static void turnLeft(int rotate_velocity);
     static void ledOn();
     static void ledOff();
 };

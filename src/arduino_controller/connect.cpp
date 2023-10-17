@@ -171,33 +171,33 @@ void Connect::stop() {
 }
 
 
-void Connect::moveForward() {
+void Connect::moveForward(int velocity) {
     setTask(MOVE_FORWARD_TASK);
-    setValue(DEFAULT_SPEED);
+    setValue(velocity);
     sendCommand();
     receiveMessage();
 }
 
 
-void Connect::moveBackward() {
+void Connect::moveBackward(int velocity) {
     setTask(MOVE_BACKWARD_TASK);
-    setValue(DEFAULT_SPEED);
+    setValue(velocity);
     sendCommand();
     receiveMessage();
 }
 
 
-void Connect::turnRight() {
+void Connect::turnRight(int rotate_velocity) {
     setTask(TURN_RIGHT_TASK);
-    setValue(DEFAULT_ROTATE_SPEED);
+    setValue(rotate_velocity);
     sendCommand();
     receiveMessage();
 }
 
 
-void Connect::turnLeft() {
+void Connect::turnLeft(int rotate_velocity) {
     setTask(TURN_LEFT_TASK);
-    setValue(DEFAULT_ROTATE_SPEED);
+    setValue(rotate_velocity);
     sendCommand();
     receiveMessage();
 }
