@@ -7,6 +7,11 @@
 #include "connect.hpp"
 
 
+namespace {
+    int last_command = -1;
+}
+
+
 class MinimalSubscriber : public rclcpp::Node {
 public:
     MinimalSubscriber()
@@ -17,21 +22,46 @@ public:
     }
 
 private:
+    //int last_command = PING_TASK;
     void topic_callback(const geometry_msgs::msg::Twist & msg) const {
-        RCLCPP_INFO(this->get_logger(), "I heard: '%f %f'", msg.linear.x, msg.angular.z);
+        //RCLCPP_INFO(this->get_logger(), "I heard: '%f %f'", msg.linear.x, msg.angular.z);
 
         Connect::resetCommand();
 
-        if (msg.linear.x > 0) {
-            Connect::moveForward();
-            Connect::ledOn();
-            RCLCPP_INFO(this->get_logger(), "I heard: move %d", Connect::getMessageAnswer());
-        }
-
         if (msg.linear.x == 0 && msg.angular.z == 0) {
             Connect::stop();
-            Connect::ledOff();
-            RCLCPP_INFO(this->get_logger(), "I heard: stop %d", Connect::getMessageAnswer());
+            last_command = STOP_TASK;
+            // RCLCPP_INFO(this->get_logger(), "I heard: stop %d", Connect::getMessageAnswer());
+        }
+
+        if (msg.linear.x > 0) {
+            if (last_command == MOVE_BACKWARD_TASK) {
+                return;
+            }
+            Connect::moveForward();
+            last_command = MOVE_FORWARD_TASK;
+            // RCLCPP_INFO(this->get_logger(), "I heard: move forward %d", Connect::getMessageAnswer());
+        }
+
+        if (msg.linear.x < 0) {
+            if (last_command == MOVE_FORWARD_TASK) {
+                return;
+            }
+            Connect::moveBackward();
+            last_command = MOVE_BACKWARD_TASK;
+            // RCLCPP_INFO(this->get_logger(), "I heard: move backward %d", Connect::getMessageAnswer());
+        }
+
+        if (msg.linear.x == 0 && msg.angular.z < 0) {
+            Connect::turnRight();
+            last_command = TURN_RIGHT_TASK;
+            // RCLCPP_INFO(this->get_logger(), "I heard: turn right %d", Connect::getMessageAnswer());
+        }
+
+        if (msg.linear.x == 0 && msg.angular.z > 0) {
+            Connect::turnLeft();
+            last_command = TURN_LEFT_TASK;
+            // RCLCPP_INFO(this->get_logger(), "I heard: turn left %d", Connect::getMessageAnswer());
         }
     }
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr subscription_;
